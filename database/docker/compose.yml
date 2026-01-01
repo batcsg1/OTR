@@ -6,7 +6,6 @@ services:
       - "${DB_PORT}:3306"
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD} 
-      MARIADB_DATABASE: ${DB_DATABASE_NAME} 
       MARIADB_USER: ${DB_DATABASE_USER} 
       MARIADB_PASSWORD: ${DB_DATABASE_PASSWORD} 
     volumes:
