@@ -10,24 +10,6 @@ const config = {
   database: process.env.DB_DATABASE_NAME,
 };
 
-export const connection = async () => {
-  try {
-    const db = await mariadb.createConnection(config);
-    console.log("Database connection established");
-    return db;
-  } catch (error) {
-    console.log("Error connecting to the database:", error);
-    return error;
-  }
-};
+export const pool = mariadb.createPool(config)
 
-export const pool = async () => {
-  try {
-    const db = mariadb.createPool(config);
-    console.log("Database pool established");
-    return db;
-  } catch (error) {
-    console.log("Error establishing pool to the database:", error);
-    return error;
-  }
-};
+
