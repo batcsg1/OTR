@@ -150,22 +150,4 @@ class Database {
 
 export default Database;
 
-const database = new Database();
 
-const filters = {
-  common_name: "White",
-};
-
-const query = {
-  select: {
-    common_name: true,
-  },
-};
-
-for (const [key, value] of Object.entries(filters)) {
-  query.where = {};
-  console.log(key);
-    query.where[key] = { contains: value };
-}
-
-await database.read("species", query);
