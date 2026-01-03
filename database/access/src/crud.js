@@ -24,8 +24,9 @@ export const create = async (model, data) => {
     console.log(insert);
     return insert;
   } catch (error) {
-    console.error("Error creating record:", error);
-    return error;
+    const err = error?.sqlMessage
+    console.error("Error creating record:", err);
+    return err;
   } finally {
     if (conn) await conn.release();
   }
@@ -57,8 +58,9 @@ export const read = async (model, select = {}, where = {}) => {
     console.log(data);
     return data;
   } catch (error) {
-    console.log("Error retrieving data", error);
-    return error;
+    const err = error?.sqlMessage
+    console.error("Error reading record:", err);
+    return err;
   } finally {
     if (conn) await conn.release();
   }
@@ -90,12 +92,41 @@ export const update = async (model, where, data) => {
 
     return update;
   } catch (error) {
-    console.error("Error updating record:", error);
-    return error;
+    const err = error?.sqlMessage
+    console.error("Error updating record:", err);
+    return err;
   } finally {
     if (conn) await conn.release();
   }
 };
+
+export const remove = async (model, where) => {
+  const conn = await pool.getConnection();
+
+  try {
+    // Build WHERE clause
+    const whereColumns = Object.keys(where);
+    const whereValues = Object.values(where);
+    const whereClause = whereColumns.map((col) => `${col} = ?`).join(" AND ");
+
+    const sql = `
+      DELETE FROM ${model} 
+      WHERE ${whereClause}
+    `;
+
+    const remove = await conn.query(sql, whereValues);
+
+    console.log("Remove result:", remove);
+
+    return remove;
+  } catch (error) {
+    const err = error?.sqlMessage
+    console.error("Error deleting record:", err);
+    return err;
+  } finally {
+    if (conn) await conn.release();
+  }
+}
 
 // const country = {
 //   data: {
@@ -115,6 +146,7 @@ const { select, where } = query;
 
 await read("country", select, where);
 
+await remove("country", where)
 
 // await update(
 //   "country",
