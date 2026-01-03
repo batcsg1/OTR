@@ -1,6 +1,14 @@
 import mariadb from "mariadb";
 import dotenv from "dotenv";
-dotenv.config({ path: "../docker/.env" });
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({
+  path: path.resolve(__dirname, "../../docker/.env")
+});
 
 const config = {
   host: process.env.DB_HOST,
